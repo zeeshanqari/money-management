@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Management</title>
+    <link rel="stylesheet" href="st.css">
+</head>
+<body>
+
+    <!-- Main Screen -->
+    <div id="mainScreen" class="screen active">
+        <div class="header">
+            <h2>Money Management<br>Version 1.1<br>Developer: Zeeshan Usama</h2>
+            <h3>منی مینجمنٹ میں خوش آمدید<br>ورژن 1.1<br>ڈویلپر: ذیشان اسامہ</h3>
+        </div>
+        
+        <div class="grid">
+            <button onclick="openForm('Credit (Taking) - قرض لینا')">Credit (Taking)<br>قرض لینا</button>
+            <button onclick="openForm('Debit (Giving) - قرض دینا')">Debit (Giving)<br>قرض دینا</button>
+            <button onclick="openUdhaarBook()">Udhaar Book Management<br>ادھار بک مینجمنٹ</button>
+            <button onclick="showAbout()">About - تعارف</button>
+            <button onclick="sendFeedback()">Send Feedback - رائے دیں</button>
+            <button onclick="exitApp()">Exit - باہر جائیں</button>
+        </div>
+    </div>
+
+    <!-- Entry Form Modal -->
+    <div id="formScreen" class="screen">
+        <h3 id="formTitle">Title</h3>
+        <input type="number" id="num" placeholder="Enter Phone Number - فون نمبر درج کریں">
+        <button onclick="makeCall()" class="call-btn">Call - کال</button>
+        
+        <input type="number" id="amount" placeholder="Enter Amount - رقم درج کریں">
+        <input type="text" id="name" placeholder="Enter Person Name - نام درج کریں">
+        
+        <label>Select Month - مہینہ منتخب کریں:</label>
+        <select id="month">
+            <option>January</option><option>February</option><option>March</option>
+            <option>April</option><option>May</option><option>June</option>
+            <option>July</option><option>August</option><option>September</option>
+            <option>October</option><option>November</option><option>December</option>
+        </select>
+
+        <label>Select Year - سال منتخب کریں:</label>
+        <select id="year">
+            <option>2026</option><option>2027</option><option>2028</option>
+            <option>2029</option><option>2030</option>
+        </select>
+
+        <label>Enter Date and Payment Status - تاریخ اور حیثیت:</label>
+        <input type="number" id="date" placeholder="Date (Day) - تاریخ (دن)">
+        <select id="paymentStatus">
+            <option value="">Select Payment Status - حیثیت منتخب کریں</option>
+            <option value="Customize - حسب مرضی">Customize - حسب مرضی</option>
+            <option id="dynamicStatus" value=""></option>
+        </select>
+
+        <div class="btn-group">
+            <button onclick="saveEntry()" class="save-btn">Continue - جاری رکھیں</button>
+            <button onclick="closeForm()" class="cancel-btn">Cancel - منسوخ کریں</button>
+        </div>
+    </div>
+
+    <!-- Udhaar Book Management Modal -->
+    <div id="listScreen" class="screen">
+        <h3>Udhaar Book Management<br>ادھار بک مینجمنٹ</h3>
+        <div id="recordList"></div>
+        <button onclick="closeList()" class="cancel-btn" style="width: 100%; margin-top: 10px;">Back - واپس</button>
+    </div>
+
+    <!-- Javascript Link -->
+    <script src="sk.js"></script>
+</body>
+</html>
