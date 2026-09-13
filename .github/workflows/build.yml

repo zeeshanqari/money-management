@@ -1,0 +1,54 @@
+name: Build Android App
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Prepare Files and Install Builder
+      run: |
+        mkdir www
+        mv *.html *.css *.js www/ || true
+        npm init -y
+        npm install @capacitor/core @capacitor/android @capacitor/cli
+        npx cap init "MoneyManagement" "com.moneymanagement.app" --web-dir www
+        npx cap add android
+
+    - name: Update API Level to 36
+      run: |
+        sed -i 's/compileSdkVersion = 34/compileSdkVersion = 36/g' android/variables.gradle
+        sed -i 's/targetSdkVersion = 34/targetSdkVersion = 36/g' android/variables.gradle
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build AAB and Generate Keystore
+      run: |
+        keytool -genkey -v -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass password123 -keypass password123 -dname "CN=MoneyManagement, O=App, C=PK"
+        cd android
+        ./gradlew bundleRelease
+        cd ..
+        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my-upload-key.keystore -storepass password123 android/app/build/outputs/bundle/release/app-release-unsigned.aab my-key-alias
+        mv android/app/build/outputs/bundle/release/app-release-unsigned.aab MoneyManagement-Signed.aab
+
+    - name: Upload Final Files
+      uses: actions/upload-artifact@v4
+      with:
+        name: MoneyManagement-App
+        path: |
+          MoneyManagement-Signed.aab
+          my-upload-key.keystore
